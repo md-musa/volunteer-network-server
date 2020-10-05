@@ -28,12 +28,10 @@ client.connect((err) => {
     .db("volunteer-network")
     .collection("event-list");
 
-  console.log("connected with mongoDB");
 
   //  [START]-----All event collection send to home
   app.get("/event-collection", (req, res) => {
     eventCollection.find({}).toArray((err, documents) => {
-      console.log(documents);
       res.send(documents);
     });
   });
@@ -44,7 +42,6 @@ client.connect((err) => {
     volunteerActivitiesCollection
       .find({email: req.query.email})
       .toArray((err, documents) => {
-        console.log(err, documents);
         res.send(documents);
       });
   });
@@ -66,13 +63,11 @@ client.connect((err) => {
   app.post("/add-event", (req, res) => {
     console.log(req.body);
     eventCollection.insertOne(req.body).then((result) => {
-      console.log(result);
       res.send({isImgSubmitted: true});
     });
   });
   // [START]-------Delete Single user registered event
   app.delete("/event-collection/:id", (req, res) => {
-    console.log(req.params.id);
     volunteerActivitiesCollection
       .deleteOne({_id: ObjectId(req.params.id)})
       .then((result) => res.send({deleted: true}));
@@ -81,7 +76,6 @@ client.connect((err) => {
 
   // [START]-------Delete from all registered event
   app.delete("/admin-delete-registered-volunteer/:id", (req, res) => {
-    console.log(req.params.id);
     volunteerActivitiesCollection
       .deleteOne({_id: ObjectId(req.params.id)})
       .then((result) => res.send({deleted: true}));
